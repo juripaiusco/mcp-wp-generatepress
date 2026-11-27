@@ -161,6 +161,16 @@ Le condizioni hanno il formato `[{ "rule": "general:site", "object": "" }]`. Reg
 | `assign-menu-location` | Assegna un menu a una posizione (`primary`, `slideout`, `secondary`…). `menu_id: 0` la svuota | `edit_theme_options` |
 | `delete-menu` | Elimina un menu e le sue voci | `edit_theme_options` |
 
+### Widget e copyright
+
+| Ability | Descrizione | Permesso |
+|---|---|---|
+| `list-widget-areas` | Aree widget registrate (`sidebar-1`, `footer-1`…`footer-5`, `footer-bar`, `top-bar`…) con i widget contenuti (markup per i widget a blocchi) | `edit_theme_options` |
+| `set-widget-area` | Sostituisce i widget di un'area con widget a blocchi (`blocks`: un markup per widget). I vecchi widget finiscono tra gli inattivi. Crea uno snapshot automatico | `edit_theme_options` |
+| `set-copyright` | Testo della barra copyright (modulo Copyright di GP Premium). Segnaposto `%current_year%` e `%copy%`. Stringa vuota = testo di default. Crea uno snapshot automatico | `edit_theme_options` |
+
+Il numero di colonne dei widget footer si imposta con `update-settings` → `footer_widget_setting` (`"0"`…`"5"`). Nota: un block Element `site-footer` attivo sostituisce sia i widget footer sia la barra copyright.
+
 Senza menu assegnato alla posizione `primary`, GeneratePress mostra in automatico tutte le pagine pubblicate: assegnare un menu è il modo corretto per controllare la navigazione.
 
 ### Snapshot
@@ -200,12 +210,13 @@ Uno snapshot salva:
 
 - `generate_settings` e tutte le opzioni `generate_*_settings` (spacing, blog, menu plus, secondary nav, backgrounds, woocommerce, page header, hooks);
 - lo stato dei moduli GP Premium (`generate_package_*`);
-- i `theme_mods` del tema attivo (logo, menu, ID del CSS aggiuntivo, …);
+- i `theme_mods` del tema attivo (logo, posizioni dei menu, copyright, ID del CSS aggiuntivo, …);
+- i widget (`sidebars_widgets`, `widget_block`);
 - il CSS aggiuntivo del Customizer.
 
 Funzionamento:
 
-- `update-settings`, `set-global-colors`, `set-typography`, `set-custom-css`, `set-logo` e `toggle-module` creano uno snapshot automatico (`auto: …`) **prima** di scrivere, e ne restituiscono l'`id`.
+- `update-settings`, `set-global-colors`, `set-typography`, `set-custom-css`, `set-logo`, `toggle-module`, `set-widget-area` e `set-copyright` creano uno snapshot automatico (`auto: …`) **prima** di scrivere, e ne restituiscono l'`id`.
 - `snapshot-restore` salva prima lo stato attuale (`auto: prima del ripristino di …`), così anche un ripristino si può annullare.
 - Un'opzione che non esisteva al momento dello snapshot viene eliminata al ripristino. Lo stato torna identico all'originale (verificato con un confronto delle opzioni nel DB prima/dopo).
 - Si conservano al massimo gli ultimi **30** snapshot, nell'opzione `gpmcp_snapshots` (non autoload).
@@ -392,6 +403,7 @@ mcp-wp-generatepress/
         ├── premium.php             # moduli ed Elements GP Premium
         ├── content.php             # post, pagine, termini, media
         ├── menus.php               # menu di navigazione e posizioni
+        ├── widgets.php             # aree widget, copyright GP Premium
         └── snapshot.php            # snapshot / restore
 ```
 
@@ -401,7 +413,7 @@ Categorie delle abilities: `gpmcp-overview`, `gpmcp-design`, `gpmcp-premium`, `g
 
 - [ ] Snapshot degli Elements
 - [x] Gestione menu di navigazione
-- [ ] Widget e aree footer
+- [x] Widget e aree footer
 - [ ] Plugin gemello per Elementor (`mcp-wp-elementor`)
 
 ## Licenza

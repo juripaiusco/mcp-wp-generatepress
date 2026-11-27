@@ -27,6 +27,8 @@ function gpmcp_snapshot_option_names() {
 		'generate_page_header_settings',
 		'generate_hooks',
 		'theme_mods_' . get_stylesheet(),
+		'sidebars_widgets',
+		'widget_block',
 	);
 
 	$modules = array(
