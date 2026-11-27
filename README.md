@@ -136,6 +136,8 @@ Permesso richiesto: `edit_theme_options`.
 | `get-element` | Element completo: contenuto e tutti i meta `_generate_*` | `edit_theme_options` |
 | `upsert-element` | Crea (senza `id`) o aggiorna (con `id`) un Element: tipo, hook, priorità, `block_type`, condizioni di visualizzazione, esclusione e utente, meta extra. **Default `draft`** | `edit_theme_options` |
 
+Per i block Element `page-hero` senza `hook` esplicito viene impostato `generate_after_header` (come fa l'interfaccia di GP Premium): senza hook l'hero non viene mostrato.
+
 Le condizioni hanno il formato `[{ "rule": "general:site", "object": "" }]`. Regole comuni: `general:site`, `general:front_page`, `general:blog`, `general:singular`, `general:archive`, `post:post`, `post:page`.
 
 ### Contenuti
@@ -149,6 +151,17 @@ Le condizioni hanno il formato `[{ "rule": "general:site", "object": "" }]`. Reg
 | `list-terms` | Termini di una tassonomia pubblica | `edit_posts` |
 | `create-term` | Crea un termine | `manage_terms` della tassonomia |
 | `upload-media` | Scarica un'immagine da URL nella libreria media, con `alt` e allegato opzionali | `upload_files` |
+
+### Menu di navigazione
+
+| Ability | Descrizione | Permesso |
+|---|---|---|
+| `list-menus` | Menu con voci annidate, posizioni del tema registrate e menu assegnato a ciascuna | `edit_theme_options` |
+| `upsert-menu` | Crea (senza `id`) o aggiorna (con `id`) un menu. Con `items` **sostituisce** tutte le voci: `{title, type: custom\|post_type\|taxonomy\|post_type_archive, url, object, object_id, target, classes, children}`. `location` opzionale per assegnarlo subito | `edit_theme_options` |
+| `assign-menu-location` | Assegna un menu a una posizione (`primary`, `slideout`, `secondary`…). `menu_id: 0` la svuota | `edit_theme_options` |
+| `delete-menu` | Elimina un menu e le sue voci | `edit_theme_options` |
+
+Senza menu assegnato alla posizione `primary`, GeneratePress mostra in automatico tutte le pagine pubblicate: assegnare un menu è il modo corretto per controllare la navigazione.
 
 ### Snapshot
 
@@ -378,6 +391,7 @@ mcp-wp-generatepress/
         ├── design.php              # settings, colori, tipografia, CSS, logo
         ├── premium.php             # moduli ed Elements GP Premium
         ├── content.php             # post, pagine, termini, media
+        ├── menus.php               # menu di navigazione e posizioni
         └── snapshot.php            # snapshot / restore
 ```
 
@@ -386,7 +400,7 @@ Categorie delle abilities: `gpmcp-overview`, `gpmcp-design`, `gpmcp-premium`, `g
 ## Roadmap
 
 - [ ] Snapshot degli Elements
-- [ ] Gestione menu di navigazione
+- [x] Gestione menu di navigazione
 - [ ] Widget e aree footer
 - [ ] Plugin gemello per Elementor (`mcp-wp-elementor`)
 

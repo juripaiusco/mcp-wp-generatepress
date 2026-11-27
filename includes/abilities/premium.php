@@ -350,6 +350,11 @@ function gpmcp_register_premium_abilities() {
 				if ( isset( $input['hook'] ) ) {
 					$meta['_generate_hook'] = sanitize_text_field( $input['hook'] );
 				}
+				// GP Premium renders page-hero blocks on _generate_hook: the admin UI defaults it, MCP must too.
+				$block_type = $input['block_type'] ?? get_post_meta( $id, '_generate_block_type', true );
+				if ( 'block' === $type && 'page-hero' === $block_type && ! isset( $input['hook'] ) && ! get_post_meta( $id, '_generate_hook', true ) ) {
+					$meta['_generate_hook'] = 'generate_after_header';
+				}
 				if ( isset( $input['custom_hook'] ) ) {
 					$meta['_generate_custom_hook'] = sanitize_text_field( $input['custom_hook'] );
 				}

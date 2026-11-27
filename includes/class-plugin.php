@@ -64,10 +64,12 @@ final class GPMCP_Plugin {
 		require_once GPMCP_DIR . 'includes/abilities/snapshot.php';
 		require_once GPMCP_DIR . 'includes/abilities/overview.php';
 		require_once GPMCP_DIR . 'includes/abilities/content.php';
+		require_once GPMCP_DIR . 'includes/abilities/menus.php';
 
 		gpmcp_register_snapshot_abilities();
 		gpmcp_register_overview_abilities();
 		gpmcp_register_content_abilities();
+		gpmcp_register_menu_abilities();
 
 		if ( gpmcp_is_generatepress_active() ) {
 			require_once GPMCP_DIR . 'includes/abilities/design.php';
