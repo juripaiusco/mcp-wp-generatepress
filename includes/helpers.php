@@ -278,7 +278,29 @@ function gpmcp_sideload_image( $url, $post_id = 0, $title = '' ) {
 		return gpmcp_error( 'gpmcp_invalid_url', 'URL non valido.' );
 	}
 
+	$url = esc_url_raw( $url );
+
+	// Reuse an attachment previously sideloaded from the same URL (keeps calls idempotent).
+	$existing = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_key'       => '_gpmcp_source_url', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value'     => $url, // phpcs:ignore WordPress.DB.SlowDBQuery
+		)
+	);
+	if ( $existing ) {
+		return (int) $existing[0];
+	}
+
 	gpmcp_load_media_includes();
 
-	return media_sideload_image( esc_url_raw( $url ), (int) $post_id, $title ? $title : null, 'id' );
+	$id = media_sideload_image( $url, (int) $post_id, $title ? $title : null, 'id' );
+	if ( ! is_wp_error( $id ) ) {
+		update_post_meta( $id, '_gpmcp_source_url', $url );
+	}
+
+	return $id;
 }
